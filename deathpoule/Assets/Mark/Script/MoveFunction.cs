@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class MoveFunction : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     public bool isRight;
+    [NotNull] private SpriteRenderer _spriteRenderer;
+    
     [SerializeField] private int _jumpCount = 1;
     public int jumpCount;
     public float isGrounded;
@@ -21,6 +24,7 @@ public class MoveFunction : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         ResetJumpCount();
     }
 
@@ -37,7 +41,7 @@ public class MoveFunction : MonoBehaviour
             
         }
 
-        
+        SpriteOrientation(isRight);
         
         if(_rigidbody.velocityY == 0)
             ResetJumpCount();
@@ -50,7 +54,7 @@ public class MoveFunction : MonoBehaviour
         {
             _rigidbody.velocity = Vector2.right * speed + _rigidbody.velocity * Vector2.up;
             isRight = true;
-            
+
         }
         
         if(Input.GetAxis("Horizontal") < 0)
@@ -103,5 +107,13 @@ public class MoveFunction : MonoBehaviour
     public void ResetJumpCount()
     {
         jumpCount = _jumpCount;
+    }
+
+    void SpriteOrientation(bool rigth)
+    {
+        if (rigth)
+            _spriteRenderer.flipX = false;
+        else
+            _spriteRenderer.flipX = true;
     }
 }
